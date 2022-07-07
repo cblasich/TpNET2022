@@ -117,10 +117,11 @@
             this.dgvPersonas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPersonas.Size = new System.Drawing.Size(1078, 241);
             this.dgvPersonas.TabIndex = 0;
+            this.dgvPersonas.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvPersonas_CellFormatting);
             // 
             // id
             // 
-            this.id.DataPropertyName = "Id";
+            this.id.DataPropertyName = "id_persona";
             this.id.HeaderText = "ID";
             this.id.Name = "id";
             this.id.ReadOnly = true;
@@ -162,7 +163,7 @@
             // 
             // fechaNacimiento
             // 
-            this.fechaNacimiento.DataPropertyName = "FechaNac";
+            this.fechaNacimiento.DataPropertyName = "fecha_nac";
             this.fechaNacimiento.HeaderText = "Fecha de nacimiento";
             this.fechaNacimiento.Name = "fechaNacimiento";
             this.fechaNacimiento.ReadOnly = true;
@@ -176,15 +177,15 @@
             // 
             // tipoPersona
             // 
-            this.tipoPersona.DataPropertyName = "TipoPersona";
+            this.tipoPersona.DataPropertyName = "tipo_persona";
             this.tipoPersona.HeaderText = "Tipo de persona";
             this.tipoPersona.Name = "tipoPersona";
             this.tipoPersona.ReadOnly = true;
             // 
             // idPlan
             // 
-            this.idPlan.DataPropertyName = "IdPlan";
-            this.idPlan.HeaderText = "ID Plan";
+            this.idPlan.DataPropertyName = "desc_plan";
+            this.idPlan.HeaderText = "Plan";
             this.idPlan.Name = "idPlan";
             this.idPlan.ReadOnly = true;
             // 

@@ -79,7 +79,7 @@ namespace Data.Database
             { 
                 this.OpenConnection();
                 SqlCommand cmdCursos = new SqlCommand("select * from cursos cu inner join materias m on cu.id_materia = m.id_materia " +
-                                                      "inner join comision co on cu.id_comision = co.id_comision", SqlConn);
+                                                      "inner join comisiones co on cu.id_comision = co.id_comision", SqlConn);
                 SqlDataAdapter daCursos = new SqlDataAdapter(cmdCursos);
                 daCursos.Fill(dtCursos);
             }

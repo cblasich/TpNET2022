@@ -180,6 +180,7 @@
             this.cbxComisiones.Name = "cbxComisiones";
             this.cbxComisiones.Size = new System.Drawing.Size(209, 24);
             this.cbxComisiones.TabIndex = 12;
+            this.cbxComisiones.ValueMember = "Id";
             // 
             // cbxMaterias
             // 
@@ -189,6 +190,7 @@
             this.cbxMaterias.Name = "cbxMaterias";
             this.cbxMaterias.Size = new System.Drawing.Size(209, 24);
             this.cbxMaterias.TabIndex = 13;
+            this.cbxMaterias.ValueMember = "Id";
             // 
             // CursoDesktop
             // 

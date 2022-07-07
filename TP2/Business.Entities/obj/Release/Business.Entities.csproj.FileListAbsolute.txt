@@ -5,3 +5,10 @@ C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Business.Entities\bin\R
 C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Business.Entities\obj\Release\Business.Entities.csprojResolveAssemblyReference.cache
 C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Business.Entities\obj\Release\Business.Entities.dll
 C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Business.Entities\obj\Release\Business.Entities.pdb
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Business.Entities\bin\Release\Business.Entities.dll
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Business.Entities\bin\Release\Business.Entities.pdb
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Business.Entities\bin\Release\Util.dll
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Business.Entities\bin\Release\Util.pdb
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Business.Entities\obj\Release\Business.Entities.csprojResolveAssemblyReference.cache
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Business.Entities\obj\Release\Business.Entities.dll
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Business.Entities\obj\Release\Business.Entities.pdb

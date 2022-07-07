@@ -52,10 +52,7 @@ namespace UI.Desktop
                 this.ComisionActual = comisionLogic.GetOne(id);
                 this.CargarCombo();
                 this.MapearDeDatos();
-                
-                               
             }
-
             catch (Exception e)
             {
                 this.Notificar(this.Text, e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -118,17 +115,8 @@ namespace UI.Desktop
 
             if (this.Modo == ModoForm.Alta || this.Modo == ModoForm.Modificacion)
             {
-                try
-                {
-                    //Copio datos del formulario a la comision
-                    this.MapearADatos();
-                    //Guardo comision
-                    comLogic.Save(this.ComisionActual);
-                }
-                catch (Exception e)
-                {
-                    this.Notificar(this.Text, e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                this.MapearADatos();
+                comLogic.Save(this.ComisionActual);
             }
             else if (this.Modo == ModoForm.Baja)
             {
@@ -180,8 +168,19 @@ namespace UI.Desktop
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            this.GuardarCambios();
-            this.Close();
+            if (this.Validar())
+            {
+
+                try
+                {
+                    this.GuardarCambios();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    this.Notificar(this.Text, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)

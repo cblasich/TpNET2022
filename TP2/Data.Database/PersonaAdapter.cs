@@ -84,7 +84,30 @@ namespace Data.Database
             return personas;
         }
 
-        public DataTable GetAllConPlanes()
+        public DataTable GetAllDataTable()
+        {
+            DataTable dtPersonas = new DataTable();
+            try
+            {
+                this.OpenConnection();
+                SqlCommand cmdPersonas = new SqlCommand("select * from personas pe inner join planes pl on pe.id_plan = pl.id_plan", SqlConn);
+                SqlDataAdapter daPersonas = new SqlDataAdapter(cmdPersonas);
+                daPersonas.Fill(dtPersonas);
+            }
+            catch (Exception Ex)
+            {
+                Exception ExcepcionManejada = new Exception("Error al intentar recuperar la lista de personas", Ex);
+                throw ExcepcionManejada;
+            }
+            finally
+            {
+                //Cerramos la conexion a la BD
+                this.CloseConnection();
+            }
+            return dtPersonas;
+        }
+
+        /*public DataTable GetAllConPlanes()
         {
             DataTable alumnos = new DataTable("AlumnosConPlanes");
             try
@@ -109,7 +132,7 @@ namespace Data.Database
                 this.CloseConnection();
             }
             return alumnos;
-        }
+        }*/
         public Persona GetOnePorPersona(int idPersona)
         {
             Persona per = new Persona();
@@ -234,24 +257,51 @@ namespace Data.Database
             else return p;
         }
 
-        public void Delete(int idPersona, int idUsuario)
+        //public void Delete(int idPersona, int idUsuario)
+        //{
+        //    try
+        //    {
+        //        //Abrimos conexion
+        //        this.OpenConnection();
+
+        //        //Creamos la sentencia SQL y asignamos un valor al parametro
+        //        SqlCommand cmdDelete = new SqlCommand("DELETE personas where id_persona=@idPer", SqlConn);
+        //        cmdDelete.Parameters.Add("@idPer", SqlDbType.Int).Value = idPersona;
+                
+        //        //Ejecutamos la sentencia SQL
+        //        cmdDelete.ExecuteNonQuery();
+        //    }
+        //    catch (SqlException Ex)
+        //    {
+        //        Exception ExcepcionManejada = new Exception("La persona que se intenta eliminar está asociada a otro/s registros.", Ex);
+        //        throw ExcepcionManejada;
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        Exception ExcepcionManejada = new Exception("Error al eliminar persona.", Ex);
+        //        throw ExcepcionManejada;
+        //    }
+        //    finally
+        //    {
+        //        this.CloseConnection();
+        //    }
+        //}
+
+        public void Delete(int idPersona)
         {
             try
             {
-                //Abrimos conexion
                 this.OpenConnection();
-
                 //Creamos la sentencia SQL y asignamos un valor al parametro
-                SqlCommand cmdDelete = new SqlCommand("DELETE personas where id_persona=@idPer", SqlConn);
-                cmdDelete.Parameters.Add("@idPer", SqlDbType.Int).Value = idPersona;
-                
+                SqlCommand cmdDeletePlan = new SqlCommand("delete personas where id_persona=@idPersona", SqlConn);
+                cmdDeletePlan.Parameters.Add("@idPersona", SqlDbType.Int).Value = idPersona;
                 //Ejecutamos la sentencia SQL
-                cmdDelete.ExecuteNonQuery();
+                cmdDeletePlan.ExecuteNonQuery();
             }
-            catch (SqlException Ex)
+            catch (SqlException SqlEx)
             {
-                Exception ExcepcionManejada = new Exception("La persona que se intenta eliminar está asociada a otro/s registros.", Ex);
-                throw ExcepcionManejada;
+                Exception ExcepcionSqlManejada = new Exception("La persona tiene datos asociados. No se puede eliminar.", SqlEx);
+                throw ExcepcionSqlManejada;
             }
             catch (Exception Ex)
             {
@@ -263,6 +313,7 @@ namespace Data.Database
                 this.CloseConnection();
             }
         }
+
         protected void Update(Persona persona)
         {
             try
@@ -327,11 +378,45 @@ namespace Data.Database
             }
         }
 
+        protected void InsertDesdeUsuario(Persona persona)
+        {
+            try
+            {
+                this.OpenConnection();
+                SqlCommand cmdInsert = new SqlCommand("INSERT INTO personas(nombre, apellido, email, fecha_nac, tipo_persona) " +
+                "VALUES(@nombre, @apellido, @email, @fecha_nac, @tipo_persona) " +
+                "SELECT @@identity AS id_persona", //linea para recuperar el ID que asigno el Sql automaticamente
+                SqlConn);
+
+                cmdInsert.Parameters.Add("@nombre", SqlDbType.VarChar, 50).Value = persona.Nombre;
+                cmdInsert.Parameters.Add("@apellido", SqlDbType.VarChar, 50).Value = persona.Apellido;
+                cmdInsert.Parameters.Add("@email", SqlDbType.VarChar, 50).Value = persona.Email;
+                cmdInsert.Parameters.Add("@fecha_nac", SqlDbType.VarChar, 10).Value = persona.FechaNac;
+                cmdInsert.Parameters.Add("@tipo_persona", SqlDbType.Int).Value = (int)persona.TipoPersona;
+
+                persona.Id = Decimal.ToInt32((decimal)cmdInsert.ExecuteScalar()); //Asi se obtiene el ID que asigno la BD automaticamente.
+            }
+            catch (Exception Ex)
+            {
+                Exception ExcepcionManejada = new Exception("Error al crear persona.", Ex);
+                throw ExcepcionManejada;
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+        }
+
         public void Save(Persona persona)
         {
             if (persona.State == BusinessEntity.States.New)
             {
-                this.Insert(persona);
+                if (persona.Legajo > 0) {  // Legajo > 0 : es el circuito de alta de persona normal.
+                    this.Insert(persona);
+                }
+                else {  // si Legajo = 0 significa que el alta de persona es desde el Alta usuario.
+                    this.InsertDesdeUsuario(persona);
+                }   
             }
             else if (persona.State == BusinessEntity.States.Modified)
             {

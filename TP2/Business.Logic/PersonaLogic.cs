@@ -46,19 +46,44 @@ namespace Business.Logic
                 throw ExcepcionManejada;
             }
         }
-        public DataTable GetAllConPlanes()
+
+        public DataTable GetAllDataTable()
         {
-            return PersonaData.GetAllConPlanes();
+            try
+            {
+                return this.PersonaData.GetAllDataTable();
+            }
+            catch (Exception Ex)
+            {
+                Exception ExcepcionManejada = new Exception("Error al recuperar la lista de personas.", Ex);
+                throw ExcepcionManejada;
+            }
         }
+
         public void Save(Persona persona)
         {
             if (persona.State == BusinessEntity.States.New)
             {
-                if (this.ValidarLegajo(persona))
-                {
+                //if (this.ValidarLegajo(persona))
+                //{
+                //    this.PersonaData.Save(persona);
+                //}
+                //else throw new Exception("El legajo ingresado ya existe.");
+
+
+                if (persona.Legajo > 0) {   // si Legajo = 0 significa que el alta de persona es desde el Alta usuario.
+                    if (this.ValidarLegajo(persona)) {
+                        this.PersonaData.Save(persona);
+                    }
+                    else throw new Exception("El legajo ingresado ya existe.");
+                } else { // legajo = 0 : viene desde Alta usuario. fecha nac y tipo persona se setean 
+                    
+                    persona.FechaNac = "01/01/1000";
+                    persona.TipoPersona = Enumeradores.TiposPersonas.Alumno;
                     this.PersonaData.Save(persona);
                 }
-                else throw new Exception("El legajo ingresado ya existe.");
+
+
             }
             if (persona.State == BusinessEntity.States.Modified)
             {
@@ -85,9 +110,13 @@ namespace Business.Logic
             return valido;
         }
 
-        public void Delete(int idPersona, int idUsuario)
+        //public void Delete(int idPersona, int idUsuario)
+        //{
+        //    this.PersonaData.Delete(idPersona, idUsuario);
+        //}
+        public void Delete(int id)
         {
-            this.PersonaData.Delete(idPersona, idUsuario);
+            PersonaData.Delete(id);
         }
 
     }

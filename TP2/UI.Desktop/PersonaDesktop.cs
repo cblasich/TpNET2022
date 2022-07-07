@@ -133,38 +133,23 @@ namespace UI.Desktop
             }
         }
 
-        public override void GuardarCambios()
-        {
+        public override void GuardarCambios() {
+
             PersonaLogic perLogic = new PersonaLogic();
-            if (this.Modo == ModoForm.Alta)
-            {
+            
+            if (this.Modo == ModoForm.Alta) {
                 Persona perNueva = new Persona();
                 this.PersonaActual = perNueva;
             }
-            if (this.Modo == ModoForm.Alta || this.Modo == ModoForm.Modificacion)
-            {
-                try
-                {
-                    this.MapearADatos();
-                    perLogic.Save(this.PersonaActual);
-                }
-                catch (Exception e)
-                {
-                    this.Notificar(this.Text, e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            if (this.Modo == ModoForm.Alta || this.Modo == ModoForm.Modificacion) {
+                this.MapearADatos();
+                perLogic.Save(this.PersonaActual);
             }
-            else if (this.Modo == ModoForm.Baja)
-            {
-                try
-                {
-                    UsuarioLogic usuLogic = new UsuarioLogic();
-                    Usuario usuActual = new Usuario();
-                    usuActual = usuLogic.GetOnePorIdPersona(this.PersonaActual.Id);
-                    //Elimino la persona. El usuario lo elimino desde la capa de datos
-                    perLogic.Delete(PersonaActual.Id, usuActual.Id);
+            else if (this.Modo == ModoForm.Baja) {
+                try {
+                    perLogic.Delete(this.PersonaActual.Id);
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     this.Notificar(this.Text, e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -225,8 +210,19 @@ namespace UI.Desktop
         }
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (this.Validar()) this.GuardarCambios();
-            this.Close();
+            if (this.Validar()) {
+
+                try
+                {
+                    this.GuardarCambios();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    this.Notificar(this.Text, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+                
         }
         private void btnCancelar_Click(object sender, EventArgs e)
         {

@@ -11,7 +11,9 @@ namespace Business.Entities
         private string _nombreUsuario;
         private string _clave;
         private bool _habilitado;
+        private bool _cambiaClave;
         private int _idPersona;
+
 
         public string NombreUsuario
         {
@@ -29,6 +31,12 @@ namespace Business.Entities
         {
             get { return _habilitado; }
             set { _habilitado = value; }
+        }
+
+        public bool CambiaClave
+        {
+            get { return _cambiaClave; }
+            set { _cambiaClave = value; }
         }
 
         public int IdPersona

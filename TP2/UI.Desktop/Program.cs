@@ -21,10 +21,9 @@ namespace UI.Desktop
             //Application.Run(new Planes());
             //Application.Run(new Materias());
             //Application.Run(new Comisiones());
-            Application.Run(new Cursos());
-
+            //Application.Run(new Cursos());
             //Application.Run(new Personas());
-            //Application.Run(new Usuarios());
+            Application.Run(new Usuarios());
            
             //Application.Run(new ModulosUsuarios());
             //Application.Run(new AlumnosInscripciones());

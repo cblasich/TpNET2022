@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Business.Entities;
 using Business.Logic;
+using Util;
 
 namespace UI.Desktop
 {
@@ -25,7 +26,7 @@ namespace UI.Desktop
             try
             {
                 PersonaLogic pl = new PersonaLogic();
-                this.dgvPersonas.DataSource = pl.GetAll();
+                this.dgvPersonas.DataSource = pl.GetAllDataTable();
             }
             catch (Exception e)
             {
@@ -59,7 +60,7 @@ namespace UI.Desktop
         {
             if (this.dgvPersonas.SelectedRows.Count == 1)
             {
-                int ID = ((Business.Entities.Persona)this.dgvPersonas.SelectedRows[0].DataBoundItem).Id;
+                int ID = (int)this.dgvPersonas.SelectedRows[0].Cells[0].Value;
                 PersonaDesktop formPersona = new PersonaDesktop(ID, ApplicationForm.ModoForm.Modificacion);
                 formPersona.ShowDialog();
             }
@@ -70,11 +71,31 @@ namespace UI.Desktop
         {
             if (this.dgvPersonas.SelectedRows.Count == 1)
             {
-                int ID = ((Business.Entities.Persona)this.dgvPersonas.SelectedRows[0].DataBoundItem).Id;
+                int ID = (int)this.dgvPersonas.SelectedRows[0].Cells[0].Value;
                 PersonaDesktop formPersona = new PersonaDesktop(ID, ApplicationForm.ModoForm.Baja);
                 formPersona.ShowDialog();
             }
             this.Listar();
+        }
+
+        private void dgvPersonas_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvPersonas.Columns[e.ColumnIndex].Name == "tipoPersona")
+            { 
+               Util.Enumeradores.TiposPersonas enumValue = (Util.Enumeradores.TiposPersonas)e.Value ;
+               switch(enumValue) 
+               {
+                   case Enumeradores.TiposPersonas.Administrador:
+                        e.Value = "Administrador";
+                        break;
+                   case Enumeradores.TiposPersonas.Alumno:
+                        e.Value = "Alumno";
+                        break;
+                   case Enumeradores.TiposPersonas.Docente:
+                        e.Value = "Docente";
+                        break;
+               }  
+             }
         }
 
     }

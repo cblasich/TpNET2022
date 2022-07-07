@@ -105,15 +105,8 @@ namespace UI.Desktop
             }
             if (this.Modo == ModoForm.Alta || this.Modo == ModoForm.Modificacion)
             {
-                try
-                {
-                    this.MapearADatos();
-                    especialidadLogic.Save(this.EspecialidadActual);
-                }
-                catch (Exception e)
-                {
-                    this.Notificar(this.Text, e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                this.MapearADatos();
+                especialidadLogic.Save(this.EspecialidadActual);
             }
             else if (this.Modo == ModoForm.Baja)
             {
@@ -162,8 +155,18 @@ namespace UI.Desktop
         }
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (this.Validar()) this.GuardarCambios();
-            this.Close();
+            if (this.Validar())
+            {
+                try
+                {
+                    this.GuardarCambios();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    this.Notificar(this.Text, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)

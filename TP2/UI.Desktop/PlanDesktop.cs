@@ -134,15 +134,8 @@ namespace UI.Desktop
 
             if (this.Modo == ModoForm.Alta || this.Modo == ModoForm.Modificacion)
             {
-                try
-                {
-                    this.MapearADatos();  //Copio datos del form a la entidad
-                    planLogic.Save(this.PlanActual);
-                }
-                catch (Exception e)
-                {
-                    this.Notificar(this.Text, e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                this.MapearADatos();  //Copio datos del form a la entidad
+                planLogic.Save(this.PlanActual);
             }
             else if (this.Modo == ModoForm.Baja)
             {
@@ -167,17 +160,17 @@ namespace UI.Desktop
             switch (this.Modo)
             {
                 case ModoForm.Alta:
-                    this.Text = "Alta de Plan";
+                    this.Text = "Alta de plan";
                     this.btnAceptar.Text = "Guardar";
                     break;
 
                 case ModoForm.Modificacion:
-                    this.Text = "Modificación de Plan";
+                    this.Text = "Modificación de plan";
                     this.btnAceptar.Text = "Guardar";
                     break;
 
                 case ModoForm.Baja:
-                    this.Text = "Baja de Plan";
+                    this.Text = "Baja de plan";
                     this.btnAceptar.Text = "Eliminar";
                     this.txtDescripcion.Enabled = false;
                     this.cbxEspecialidades.Enabled = false;
@@ -192,8 +185,19 @@ namespace UI.Desktop
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (this.Validar()) this.GuardarCambios();
-            this.Close();
+            if (this.Validar())
+            {
+
+                try
+                {
+                    this.GuardarCambios();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    this.Notificar(this.Text, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)

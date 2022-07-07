@@ -3,3 +3,7 @@ C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Util\bin\Release\Util.p
 C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Util\obj\Release\Util.dll
 C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Util\obj\Release\Util.pdb
 C:\Users\Caro\Documents\GitHub\RepoGithub-tpNet-2018\TP2\Util\obj\Release\Util.csprojResolveAssemblyReference.cache
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Util\bin\Release\Util.dll
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Util\bin\Release\Util.pdb
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Util\obj\Release\Util.dll
+C:\Users\Caro\Documents\Caro\Facu\Electivas\NET\TpNet2022\TP2\Util\obj\Release\Util.pdb

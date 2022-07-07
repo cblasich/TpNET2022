@@ -15,6 +15,14 @@ namespace UI.Desktop
 {
     public partial class CursoDesktop : ApplicationForm
     {
+
+        private Curso _cursoActual;
+        public Curso CursoActual
+        {
+            get { return _cursoActual; }
+            set { _cursoActual = value; }
+        }
+
         public CursoDesktop()
         {
             InitializeComponent();
@@ -23,28 +31,26 @@ namespace UI.Desktop
         //este constructor servirá para las altas
         {
             this.Modo = modo;
+            this.CambiarBotones();
+            this.CursoActual = new Curso();
             this.CargarCombos(); 
         }
         public CursoDesktop(int id, ModoForm modo):this()
         {
             this.Modo = modo;
+            CursoLogic cursoLogic = new CursoLogic();
+            this.CambiarBotones();
+
             try
             {
-                CursoLogic cursoLogic = new CursoLogic();
                 this.CursoActual = cursoLogic.GetOne(id);
+                this.CargarCombos();
                 this.MapearDeDatos();
             }
             catch (Exception e)
             {
                 this.Notificar(e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
-        }
-        private Curso _cursoActual;
-        public Curso CursoActual
-        {
-            get { return _cursoActual; }
-            set { _cursoActual = value; }
         }
 
         public void CargarCombos()
@@ -52,6 +58,38 @@ namespace UI.Desktop
             cbxComisiones.DataSource = new ComisionLogic().GetAll();
             cbxMaterias.DataSource = new MateriaLogic().GetAll();
         }
+
+        public void CambiarBotones()
+        {
+            //Para cambiar textos de ventanas y botones
+            switch (this.Modo)
+            {
+                case ModoForm.Alta:
+                    this.Text = "Alta de curso";
+                    this.btnAceptar.Text = "Guardar";
+                    break;
+
+                case ModoForm.Modificacion:
+                    this.Text = "Modificación de curso";
+                    this.btnAceptar.Text = "Guardar";
+                    break;
+
+                case ModoForm.Baja:
+                    this.Text = "Baja de curso";
+                    this.btnAceptar.Text = "Eliminar";
+                    this.txtCupo.Enabled = false;
+                    this.txtAnio.Enabled = false;
+                    this.cbxMaterias.Enabled = false;
+                    this.cbxComisiones.Enabled = false;
+                    break;
+
+                case ModoForm.Consulta:
+                    this.Text = "Consulta de Plan";
+                    this.btnAceptar.Text = "Aceptar";
+                    break;
+            }
+        }
+
         public override void MapearDeDatos()
         {
             this.txtIdCurso.Text = this.CursoActual.Id.ToString();
@@ -127,15 +165,8 @@ namespace UI.Desktop
             }
             if (this.Modo == ModoForm.Alta || this.Modo == ModoForm.Modificacion)
             {
-                try
-                {
-                    this.MapearADatos();
-                    cursoLogic.Save(this.CursoActual);
-                }
-                catch (Exception e)
-                {
-                    this.Notificar(this.Text, e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                this.MapearADatos();
+                cursoLogic.Save(this.CursoActual);
             }
             else if (this.Modo == ModoForm.Baja)
             {
@@ -194,8 +225,18 @@ namespace UI.Desktop
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (this.Validar()) this.GuardarCambios();
-            this.Close();
+            if (this.Validar())
+            {
+                try
+                {
+                    this.GuardarCambios();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    this.Notificar(this.Text, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
