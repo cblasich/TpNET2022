@@ -147,11 +147,11 @@ namespace Data.Database
                     per.Id = (int)drPersonas["id_persona"];
                     per.Nombre = (string)drPersonas["nombre"];
                     per.Apellido = (string)drPersonas["apellido"];
-                    per.Direccion = (string)drPersonas["direccion"];
+                    //per.Direccion = (string)drPersonas["direccion"];
                     per.Email = (string)drPersonas["email"];
-                    per.Telefono = (string)drPersonas["telefono"];
-                    per.FechaNac = drPersonas["fecha_nac"].ToString();
-                    per.Legajo = (int)drPersonas["legajo"];
+                    //per.Telefono = (string)drPersonas["telefono"];
+                    //per.FechaNac = drPersonas["fecha_nac"].ToString();
+                    //per.Legajo = (int)drPersonas["legajo"];
                     per.TipoPersona = (Util.Enumeradores.TiposPersonas)drPersonas["tipo_persona"];
                     if (drPersonas["id_plan"] != DBNull.Value)
                     {
@@ -189,11 +189,11 @@ namespace Data.Database
                     p.Id = (int)drPersona["id_persona"];
                     p.Apellido = drPersona["apellido"].ToString();
                     p.Nombre = drPersona["nombre"].ToString();
-                    p.Legajo = (int)drPersona["legajo"];
-                    p.Telefono = drPersona["telefono"].ToString();
+                    //p.Legajo = (int)drPersona["legajo"];
+                    //p.Telefono = drPersona["telefono"].ToString();
                     p.Email = drPersona["email"].ToString();
-                    p.FechaNac = drPersona["fecha_nac"].ToString(); 
-                    p.Direccion = drPersona["direccion"].ToString();
+                    //p.FechaNac = drPersona["fecha_nac"].ToString(); 
+                    //p.Direccion = drPersona["direccion"].ToString();
                     p.TipoPersona = (Util.Enumeradores.TiposPersonas)drPersona["tipo_persona"];
                     if (drPersona["id_plan"] != DBNull.Value)
                     {
@@ -345,6 +345,33 @@ namespace Data.Database
                 this.CloseConnection();
             }
         }
+
+        protected void UpdateDesdeUsuario(Persona persona)
+        {
+            try
+            {
+                this.OpenConnection();
+                SqlCommand cmdUpdate = new SqlCommand("UPDATE personas SET nombre = @nombre, apellido = @apellido, " +
+                "email = @email, tipo_persona = @tipo_persona  WHERE id_persona = @id", SqlConn);
+
+                cmdUpdate.Parameters.Add("@id", SqlDbType.Int).Value = persona.Id;
+                cmdUpdate.Parameters.Add("@nombre", SqlDbType.VarChar, 50).Value = persona.Nombre;
+                cmdUpdate.Parameters.Add("@apellido", SqlDbType.VarChar, 50).Value = persona.Apellido;
+                cmdUpdate.Parameters.Add("@email", SqlDbType.VarChar, 50).Value = persona.Email;
+                cmdUpdate.Parameters.Add("@tipo_persona", SqlDbType.Int).Value = (int)persona.TipoPersona;
+                cmdUpdate.ExecuteNonQuery();
+            }
+            catch (Exception Ex)
+            {
+                Exception ExcepcionManejada = new Exception("Error al modificar datos de la persona.", Ex);
+                throw ExcepcionManejada;
+            }
+            finally
+            {
+                this.CloseConnection();
+            }
+        }
+
         protected void Insert(Persona persona)
         {
             try
@@ -420,7 +447,12 @@ namespace Data.Database
             }
             else if (persona.State == BusinessEntity.States.Modified)
             {
-                this.Update(persona);
+                if (persona.Legajo > 0) {
+                    this.Update(persona);
+                }
+                else {
+                    this.UpdateDesdeUsuario(persona);
+                }
             }
             persona.State = BusinessEntity.States.Unmodified;
         }

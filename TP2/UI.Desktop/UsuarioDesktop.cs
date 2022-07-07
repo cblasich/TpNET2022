@@ -48,8 +48,12 @@ namespace UI.Desktop
             try
             {
                 UsuarioLogic usuLogic = new UsuarioLogic();
+                PersonaLogic perLogic = new PersonaLogic();
+
                 //Recupero el usuario
                 this.UsuarioActual = usuLogic.GetOne(id);
+                this.PersonaActual = perLogic.GetOnePorUsuario(this.UsuarioActual.Id);
+
                 this.MapearDeDatos(); 
 
                 /*Enumeradores.TiposPersonas tipoPersona = new PersonaLogic().GetOnePorPersona(UsuarioActual.IdPersona).TipoPersona;
@@ -75,9 +79,13 @@ namespace UI.Desktop
             if (this.Modo == ModoForm.Alta || this.Modo == ModoForm.Modificacion)
             {
                 if (this.Modo == ModoForm.Modificacion) {
-                    
+
+                    //PersonaLogic pl = new PersonaLogic();
+                    //PersonaActual = pl.GetOnePorPersona(this.UsuarioActual.IdPersona);
+
                     UsuarioActual.Id = Convert.ToInt16(this.txtId.Text.Trim());
-                    PersonaActual.Id = UsuarioActual.IdPersona;
+                    
+                    //PersonaActual.Id = UsuarioActual.IdPersona;
                 }
                 UsuarioActual.NombreUsuario = this.txtUsuario.Text.Trim();
                 UsuarioActual.Habilitado = this.chkHabilitado.Checked;
@@ -109,12 +117,12 @@ namespace UI.Desktop
         }
         public override void MapearDeDatos()
         {
-            PersonaLogic pl = new PersonaLogic();
-            Persona p = null;
+            //PersonaLogic pl = new PersonaLogic();
+            //Persona p = null;
 
             try {
                 //Recupero persona correspondiente al usuario logueado
-                p = pl.GetOnePorPersona(this.UsuarioActual.IdPersona);
+                //p = pl.GetOnePorPersona(this.UsuarioActual.IdPersona);
                 
                 //Copio datos al formulario
                 this.txtId.Text = UsuarioActual.Id.ToString();
@@ -122,9 +130,9 @@ namespace UI.Desktop
                 this.txtClave.Text = UsuarioActual.Clave.ToString();
                 this.txtConfirmarClave.Text = UsuarioActual.Clave;
                 this.chkHabilitado.Checked = this.UsuarioActual.Habilitado;
-                this.txtNombre.Text = p.Nombre.ToString();
-                this.txtApellido.Text = p.Apellido.ToString();
-                this.txtEmail.Text = p.Email.ToString();
+                this.txtNombre.Text = this.PersonaActual.Nombre.ToString();
+                this.txtApellido.Text = this.PersonaActual.Apellido.ToString();
+                this.txtEmail.Text = this.PersonaActual.Email.ToString();
             }
             catch(Exception ex)
             {
@@ -261,30 +269,6 @@ namespace UI.Desktop
         {
 
         }
-        //private void chkExistePersona_CheckedChanged(object sender, EventArgs e)
-        //{
-        //    if (chkExistePersona.Checked)
-        //    {
-        //        txtNombre.Enabled = false;
-        //        txtApellido.Enabled = false;
-        //        txtEmail.Enabled = false;
-        //        txtDireccion.Enabled = false;
-        //        txtTelefono.Enabled = false;
-        //        dtpFechaNacimiento.Enabled = false;
-        //        cmbPlanes.Enabled = false;
-        //        cmbTiposPersona.Enabled = false;
-        //    }
-        //    else
-        //    {
-        //        txtNombre.Enabled = true;
-        //        txtEmail.Enabled = true;
-        //        dtpFechaNacimiento.Enabled = true;
-        //        cmbPlanes.Enabled = true;
-        //        txtApellido.Enabled = true;
-        //        txtDireccion.Enabled = true;
-        //        txtTelefono.Enabled = true;
-        //        cmbTiposPersona.Enabled = true;
-        //    }
-        //}
+        
     }
 }
